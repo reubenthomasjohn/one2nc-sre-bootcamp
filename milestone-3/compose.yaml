@@ -1,0 +1,9 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - BUILD_DATE=$(date +%Y-%m-%d:%H:%M:%S)
+    ports:
+    - "3000:3000"

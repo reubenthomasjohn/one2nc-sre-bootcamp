@@ -21,8 +21,8 @@ stop_db:
 
 .PHONY: check_db_migrations
 check_db_migrations:
+	echo "not implemented yet"
 	
-
 .PHONY: run_migrations
 run_migrations:
 	docker exec -i postgres_container psql -U postgres mydb -c 'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
@@ -36,16 +36,16 @@ run_migrations:
         migration_name=$$(basename "$$(dirname "$$file")"); \
         echo "Applying migration $$migration_name"; \
         psql -U postgres mydb < "$$file"; \
-        psql -U postgres mydb -c "INSERT INTO migration_history (migration_name) VALUES ('$$migration_name');"; \
+        psql -U postgres mydb -c "INSERT INTO migration_history (migration_name) VALUES ('\''$$migration_name'\'');"; \
     done'
-
 
 .PHONY: build_api
 build_api:
-	echo "building api"
-
+	docker-compose build --no-cache
 
 .PHONY: run_api
 run_api:
 	make start_db 
-	make 
+	make run_migrations
+	make build_api
+	docker compose up -d
