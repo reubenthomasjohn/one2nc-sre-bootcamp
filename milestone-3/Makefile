@@ -2,22 +2,26 @@ all: start_db check_db_migrations run_migrations build_api run_api
 
 .PHONY: start_db
 start_db:
-	docker run -d \
-		-e POSTGRES_DB=mydb \
-		-e POSTGRES_PASSWORD=testpass123 \
-		-e POSTGRES_USER=postgres \
-		-p 6500:5432 \
-		-v postgres_data:/var/lib/postgresql/data \
-		--name postgres_container \
-		postgres:15.2
-
-	sleep 5 # Wait for the container to start, there must be a better way to do this. Wait until container is up maybe?
-
-	docker cp ./api/prisma/migrations postgres_container:/var/lib/postgresql/data/
+	if [ -z $$(docker ps -q -f name=postgres_container) ]; then \
+		docker run -d \
+			-e POSTGRES_DB=mydb \
+			-e POSTGRES_PASSWORD=testpass123 \
+			-e POSTGRES_USER=postgres \
+			-p 6500:5432 \
+			-v postgres_data:/var/lib/postgresql/data \
+			--name postgres_container \
+			postgres:15.2; \
+		sleep 5; \
+		docker cp ./api/prisma/migrations postgres_container:/var/lib/postgresql/data/; \
+		echo "PostgreSQL container started."; \
+	else \
+        echo "PostgreSQL container is already running."; \
+    fi
 
 .PHONY: stop_db
 stop_db:
 	docker stop postgres_container
+	docker container rm postgres_container
 
 .PHONY: check_db_migrations
 check_db_migrations:
