@@ -29,3 +29,10 @@ Current runner version: '2.316.0'
 ## References:
 
 1. https://github.blog/changelog/2020-07-06-github-actions-manual-triggers-with-workflow_dispatch/
+
+## Errors
+
+```sh
+Error: fatal: bad object refs/heads/main 2
+Error: The process '/opt/homebrew/bin/git' failed with exit code 128
+```

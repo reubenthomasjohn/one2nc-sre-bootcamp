@@ -18,11 +18,10 @@ jobs:
         with:
           node-version: "18"
       - run: |
-          npm i
           open -a Docker
           make run_api
           echo "🍏 This job's status is ${{ job.status }}."
-        working-directory: ./milestone-4/api
+        working-directory: ./milestone-4/
 
   publish-docker-image:
     runs-on: self-hosted
