@@ -36,7 +36,7 @@ jobs:
           password: ${{ secrets.DOCKER_HUB_PASSWORD }}
 
       - name: Build the docker image
-        run: cd milestone-4/ && docker build -t ${{ secrets.DOCKER_HUB_USERNAME }}/one2n-sre-bootcamp-api-image:v1 .
+        run: cd milestone-4/ && docker build --build-arg DATABASE_URL=${{ secrets.DATABASE_URL }} -t ${{ secrets.DOCKER_HUB_USERNAME }}/one2n-sre-bootcamp-api-image:v1 .
 
       - name: Docker push
         run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/one2n-sre-bootcamp-api-image:v1
