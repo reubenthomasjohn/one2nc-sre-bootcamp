@@ -3,7 +3,7 @@ FROM node:18 AS build
 WORKDIR /app
 # Required for Prisma Client to work in container
 RUN apt update && apt install -y openssl
-COPY api/package.json api/package-lock.json api/prisma api/.env ./
+COPY api/package.json api/package-lock.json api/prisma ./
 RUN npm install -g prisma && npm install --only=prod && npm install @prisma/client
 COPY api/ .
 RUN prisma generate
