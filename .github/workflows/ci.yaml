@@ -1,0 +1,43 @@
+name: milestone-4-ci-pipeline
+run-name: ${{ github.actor }} is running api 🚀
+on:
+  push:
+    paths:
+      - milestone-4/api/**
+  workflow_dispatch:
+jobs:
+  run-api:
+    runs-on: self-hosted
+    needs: publish-docker-image
+    steps:
+      - name: Install make in runner
+        run: brew install make
+
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+      - run: |
+          npm i
+          open -a Docker
+          make run_api
+          echo "🍏 This job's status is ${{ job.status }}."
+        working-directory: ./milestone-4/api
+
+  publish-docker-image:
+    runs-on: self-hosted
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@f4ef78c080cd8ba55a85445d5b36e214a81df20a
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_PASSWORD }}
+
+      - name: Build the docker image
+        run: cd milestone-4/ && docker build -t reubenthomasjohn/one2n-sre-bootcamp-api-image:v1 .
+
+      - name: Docker push
+        run: docker push reubenthomasjohn/one2n-sre-bootcamp-api-image:v1
