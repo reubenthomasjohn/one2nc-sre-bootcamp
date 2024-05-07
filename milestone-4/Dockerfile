@@ -3,6 +3,7 @@ FROM node:18 AS build
 WORKDIR /app
 # Set DATABASE_URL environment variable
 ARG DATABASE_URL
+RUN echo "------------------DATABASE_URL is set to: $DATABASE_URL------------------"
 ENV DATABASE_URL=$DATABASE_URL
 # Required for Prisma Client to work in container
 RUN apt update && apt install -y openssl
