@@ -5,5 +5,6 @@ services:
       dockerfile: Dockerfile
       args:
         - BUILD_DATE=$(date +%Y-%m-%d:%H:%M:%S)
+        - DATABASE_URL=${DATABASE_URL}
     ports:
     - "3000:3000"
