@@ -1,0 +1,67 @@
+require 'yaml'
+settings = YAML.load_file(File.join(File.dirname(__FILE__), 'settings.yaml'))
+
+Vagrant.configure("2") do |config|
+  config.vm.box = settings['box_name']
+  # config.vm.box_version = settings['box_version']
+  config.vm.box_check_update = false
+
+  # Create the destination directory before provisioning the file
+  config.vm.provision "shell", inline: <<-SHELL
+    mkdir -p "$HOME/one2n-bootcamp/"
+    chmod 777 "$HOME/one2n-bootcamp/"
+    source "$HOME/one2n-bootcamp/vagrant-setup/setenv.sh"
+  SHELL
+
+  config.vm.provision "file", source: "/Users/reubenthomas/Documents/one2n-bootcamp/milestone-5/", destination: "$HOME/one2n-bootcamp/"
+
+  settings['vm'].each do |vm_config|
+    config.vm.define vm_config['name'] do |vm|
+      vm.vm.hostname = vm_config['name']
+      vm.vm.network "private_network", ip: vm_config['ip']
+      vm.vm.synced_folder ".", "/vagrant", disabled: false
+
+      vm.vm.provider "vmware_fusion" do |vb|
+        vb.gui = false
+        vb.memory = vm_config['memory']
+        vb.cpus = vm_config['cpus']
+      end
+
+      vm.vm.provision "shell", inline: <<-SHELL
+
+        # Function to install Docker
+        InstallDocker () {
+            echo "Installing Docker and Docker-Compose..."
+            for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+            # Add Docker's official GPG key:
+            sudo apt-get update
+            sudo apt-get install ca-certificates curl
+            sudo install -m 0755 -d /etc/apt/keyrings
+            sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg -o /etc/apt/keyrings/docker.asc
+            sudo chmod a+r /etc/apt/keyrings/docker.asc
+
+            # Add the repository to Apt sources:
+            echo \
+            "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] https://download.docker.com/linux/ubuntu \
+            $(. /etc/os-release && echo "$VERSION_CODENAME") stable" | \
+            sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+            sudo apt-get update
+            # Install latest version of Docker
+            sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin -y
+            # Verify installation
+            sudo docker run hello-world
+            docker compose version
+            
+            source $HOME/one2n-bootcamp/vagrant-setup/setenv.sh
+        }
+
+        apt update
+        apt upgrade -y
+        apt install -y wget vim net-tools gcc make tar git unzip sysstat tree
+        echo "192.168.201.10 api-prod01" >> /etc/hosts
+        InstallDocker
+      SHELL
+      # vm.vm.provision "shell", path: "scripts/common.sh"
+    end
+  end
+end

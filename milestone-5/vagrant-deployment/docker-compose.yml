@@ -1,0 +1,48 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:15.2
+    environment:
+      POSTGRES_DB: mydb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: testpass123
+    ports:
+      - "6500:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+  
+  api1:
+    build:
+      context: .
+      dockerfile: api.Dockerfile
+      args:
+        - BUILD_DATE=$(date +%Y-%m-%d:%H:%M:%S)
+        - DATABASE_URL=${DATABASE_URL}
+    ports:
+    - "8081:3000"
+
+  api2:
+    build:
+      context: .
+      dockerfile: api.Dockerfile
+      args:
+        - BUILD_DATE=$(date +%Y-%m-%d:%H:%M:%S)
+        - DATABASE_URL=${DATABASE_URL}
+    ports:
+    - "8082:3000"
+     
+  nginx:
+    build: 
+      contenxt: .
+      dockerfile: nginx.Dockerfile
+    ports:
+      - 8080:80
+    depends_on:
+      - api1
+      - api2
+      - postgres
+
+volumes:
+  postgres_data:
