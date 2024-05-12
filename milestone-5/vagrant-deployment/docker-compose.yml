@@ -19,7 +19,8 @@ services:
       dockerfile: api.Dockerfile
       args:
         - BUILD_DATE=$(date +%Y-%m-%d:%H:%M:%S)
-        - DATABASE_URL=${DATABASE_URL}
+    env_file:
+    - ./.env
     ports:
     - "8081:3000"
 
@@ -29,16 +30,17 @@ services:
       dockerfile: api.Dockerfile
       args:
         - BUILD_DATE=$(date +%Y-%m-%d:%H:%M:%S)
-        - DATABASE_URL=${DATABASE_URL}
+    env_file:
+    - ./.env
     ports:
     - "8082:3000"
      
   nginx:
     build: 
-      contenxt: .
+      context: .
       dockerfile: nginx.Dockerfile
     ports:
-      - 8080:80
+      - 8080:8080
     depends_on:
       - api1
       - api2
