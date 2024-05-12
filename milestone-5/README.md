@@ -26,19 +26,37 @@ logout
 sudo vagrant status
 ```
 
+```sh
+whoami
+sudo chown -R <user> <directory>
+```
+
 ### Set up the required deployments inside the `Vagrant` box:
 
-The `vagrant-setup` folder contains 4 files.
+The `vagrant-deployment` folder contains 6 files.
 
 1. An `api.Dockerfile` to dockerize the api and create an image.
-2. 1. An `nginx.Dockerfile` to dockerize the api and create an image.
+2. An `nginx.Dockerfile` to dockerize the api and create an image.
 3. An `nginx.conf` to configure the nginx server for our purposes. This file is used in the `nginx.Dockerfile`.
 4. A `docker-compose.yaml` to deploy 2 api containers, and one nginx container, and on PostgreSQL db, all using a single `docker compose up` command.
+5. `.env` to hold the `DATABASE_URL`. Ensure this file is present.
+6. `README.md`
+   To view the results of this milestone:
 
-To view the results of this milestone:
-
-`cd milestone-5/vagrant-setup` \
-`docker compose up`
+```sh
+# cd into the vagrant-setup folder
+cd milestone-5/vagrant-setup
+# spin up the vagrant box
+sudo vagrant up
+# ssh into the box
+sudo vargant ssh <box-name>
+# cd into the deployments folder
+cd /one2n-bootcamp/milestone-5/vagrant-deployment
+# start the docker daemon inside the box
+sudo systemctl start docker
+# run docker compose up
+sudo docker compose up
+```
 
 References:
 

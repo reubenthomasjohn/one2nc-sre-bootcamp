@@ -10,7 +10,6 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
     mkdir -p "$HOME/one2n-bootcamp/"
     chmod 777 "$HOME/one2n-bootcamp/"
-    source "$HOME/one2n-bootcamp/vagrant-setup/setenv.sh"
   SHELL
 
   config.vm.provision "file", source: "/Users/reubenthomas/Documents/one2n-bootcamp/milestone-5/", destination: "$HOME/one2n-bootcamp/"
@@ -51,8 +50,6 @@ Vagrant.configure("2") do |config|
             # Verify installation
             sudo docker run hello-world
             docker compose version
-            
-            source $HOME/one2n-bootcamp/vagrant-setup/setenv.sh
         }
 
         apt update
