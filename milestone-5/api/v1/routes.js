@@ -100,7 +100,10 @@ router.delete("/students", async (req, res) => {
 // Define a route for health check
 router.get("/healthcheck", (req, res) => {
   logger.info("Health check requested");
-  res.json({ status: "UP" });
+
+  // Extract hostname from request headers
+  const apiHostname = req.headers.host;
+  res.json({ status: "UP", api: apiHostname });
 });
 
 module.exports = router;

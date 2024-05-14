@@ -1,18 +1,4 @@
-version: '3'
-
 services:
-  postgres:
-    image: postgres:15.2
-    environment:
-      POSTGRES_DB: mydb
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: testpass123
-    ports:
-      - "6500:5432"
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
-    restart: unless-stopped
-  
   api1:
     build:
       context: .
@@ -20,10 +6,12 @@ services:
       args:
         - BUILD_DATE=$(date +%Y-%m-%d:%H:%M:%S)
     env_file:
-    - ./.env
+    - ./api/.env
     ports:
     - "8081:3000"
-
+    networks:
+      - milestone-5-net
+      
   api2:
     build:
       context: .
@@ -31,9 +19,11 @@ services:
       args:
         - BUILD_DATE=$(date +%Y-%m-%d:%H:%M:%S)
     env_file:
-    - ./.env
+    - ./api/.env
     ports:
     - "8082:3000"
+    networks:
+      - milestone-5-net
      
   nginx:
     build: 
@@ -44,7 +34,8 @@ services:
     depends_on:
       - api1
       - api2
-      - postgres
 
-volumes:
-  postgres_data:
+networks:
+  milestone-5-net:
+    name: milestone-5-net
+    external: true

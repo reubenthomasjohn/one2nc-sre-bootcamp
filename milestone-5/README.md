@@ -54,9 +54,20 @@ sudo vargant ssh <box-name>
 cd /one2n-bootcamp/milestone-5/vagrant-deployment
 # start the docker daemon inside the box
 sudo systemctl start docker
+# create a docker network to put all our containers inside
+docker network create -d bridge milestone-5-net
+# spin up the PostgreSQL db container, and connect it to the created network
+docker run -d --name postgres_container -e POSTGRES_DB=mydb --network=milestone-5-net -e POSTGRES_PASSWORD=testpass123 -e POSTGRES_USER=postgres -p "6500:5432" postgres
 # run docker compose up
-sudo docker compose up
+sudo docker compose up -d
 ```
+
+### Gotchas
+
+1. The vagrant `file` provisioner uses `Net::SCP` which is very slow, and fails when a large directory is being copied.
+2. Ideally, the `api` directory should be inside `vagrant-deployment`. Right now, it is not (Because of 1). Thats why running `docker compose config` will fail. Because the path to the `.env` file is incorrect. This will be corrected when we run `sudo vagrant up`, the `Vagrantfile` moves the api directory into the `vagrant-deployment` dir.
+
+3. `compose` creates a default network and places all the services defined within the file into that network. We want our services, and the db to lie in the same network. So we create our own network and put the db inside it first. Then we tell compose to use the same network. This way, our api can reach the DB.
 
 References:
 
