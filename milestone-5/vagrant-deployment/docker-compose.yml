@@ -8,7 +8,9 @@ services:
     env_file:
     - ./api/.env
     ports:
-    - "8081:3000"
+    - "8081:8081"
+    environment:
+      - PORT=8081 # Default value, can be overridden
     networks:
       - milestone-5-net
       
@@ -21,7 +23,9 @@ services:
     env_file:
     - ./api/.env
     ports:
-    - "8082:3000"
+    - "8082:8082"
+    environment:
+      - PORT=8082 # Default value, can be overridden
     networks:
       - milestone-5-net
      
@@ -34,6 +38,8 @@ services:
     depends_on:
       - api1
       - api2
+    networks:
+      - milestone-5-net
 
 networks:
   milestone-5-net:

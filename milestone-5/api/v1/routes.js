@@ -103,7 +103,7 @@ router.get("/healthcheck", (req, res) => {
 
   // Extract hostname from request headers
   const apiHostname = req.headers.host;
-  res.json({ status: "UP", api: apiHostname });
+  res.json({ status: "UP", port: process.env.PORT });
 });
 
 module.exports = router;

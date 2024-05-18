@@ -72,3 +72,13 @@ sudo docker compose up -d
 References:
 
 1. https://devopscube.com/build-vms-mac-silicon-with-vagrant/
+
+Misc
+
+By adding ENV PORT 3000 in the Dockerfile, you set a default value of 3000 for the PORT environment variable. However, you can override this default value when you run the container using the -e flag.
+
+For example, to run your container on port 4000, you can use the following docker run command:
+`docker run -e PORT=4000 -p 4000:4000 your-image-name`
+
+-e PORT=4000 sets the PORT environment variable to 4000 inside the container.
+-p 4000:4000 maps port 4000 on your host machine to port 4000 on the container.
