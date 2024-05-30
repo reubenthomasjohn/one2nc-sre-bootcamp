@@ -5,7 +5,6 @@ sudo systemctl docker start
 minikube start
 # run this command 3 times, to add 3 nodes
 minikube node add --worker=true
-#
 ```
 
 Now, running `minikube node list` should return something like:

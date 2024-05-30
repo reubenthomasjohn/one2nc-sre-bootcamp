@@ -1,0 +1,15 @@
+server:
+  extraEnvironmentVars:
+    VAULT_ADDR: "http://127.0.0.1:8200"
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    timeoutSeconds: 10
+    periodSeconds: 15
+    failureThreshold: 15
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    timeoutSeconds: 10
+    periodSeconds: 15
+    failureThreshold: 15
