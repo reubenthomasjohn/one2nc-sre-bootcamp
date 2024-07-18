@@ -10,7 +10,7 @@ References:
    `docker run -d -e POSTGRES_DB=mydb -e POSTGRES_PASSWORD=testpass123 -e POSTGRES_USER=postgres -p "6500:5432" postgres`
 
 2. Build the api image
-   `docker build --no-cache -t api-1.0.0 . `
+   `docker build --no-cache -t api-1.0.0 .`
 
 3. Run the api container
-   `docker run -it -p 3000:3000 api-1.0.0`
+   `docker run -itd -p 3000:3000 api-1.0.0`

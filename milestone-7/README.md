@@ -52,7 +52,7 @@ helm install vault hashicorp/vault --namespace vault --version 0.28.0
 ### Editing the vault service
 
 ```sh
-kubectl edit svc vault-internal
+kubectl edit svc vault-internal --namespace vault
 # Remove the lines with ClusterIP, and change the type from ClusterIP to NodePort.
 kubectl delete -f <file_name>
 kubectl apply -f <file_name>
@@ -86,3 +86,9 @@ base64 encoding:
 Request from browser -> API External service -> API Pod -> DB Internal service -> DB Pod
 
 `kubectl edit svc vault-internal -n vault`
+
+`helm upgrade vault hashicorp/vault -f vault/values.yaml --namespace vault`
+
+## Setup Vault using Docker container:
+
+https://devopscube.com/vault-in-kubernetes/
