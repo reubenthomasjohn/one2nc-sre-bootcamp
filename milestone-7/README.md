@@ -92,3 +92,5 @@ Request from browser -> API External service -> API Pod -> DB Internal service -
 ## Setup Vault using Docker container:
 
 https://devopscube.com/vault-in-kubernetes/
+
+https://eminalemdar.medium.com/external-secrets-operator-integration-with-hashicorp-vault-aff3f956237b
